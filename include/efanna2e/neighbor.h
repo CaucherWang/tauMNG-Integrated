@@ -17,9 +17,10 @@ struct Neighbor {
     unsigned id;
     float distance;
     bool flag;
+    bool visited_in_nsg;
 
     Neighbor() = default;
-    Neighbor(unsigned id, float distance, bool f) : id{id}, distance{distance}, flag(f) {}
+    Neighbor(unsigned id, float distance, bool f) : id{id}, distance{distance}, flag(f) {visited_in_nsg = false;}
 
     inline bool operator<(const Neighbor &other) const {
         return distance < other.distance;
