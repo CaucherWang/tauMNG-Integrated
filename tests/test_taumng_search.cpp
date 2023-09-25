@@ -72,24 +72,24 @@ std::vector<std::vector<int> > load_ground_truth(const char* filename) {
 
 
 int main(int argc, char** argv) {
-  if (argc != 8) {
+  if (argc != 10) {
     std::cout << argv[0]
-              << " dataset tauMNG_path search_L search_K p stopL segmentSize"
+              << " dataset queryset gt tauMNG_path search_L search_K p stopL segmentSize"
               << std::endl;
     exit(-1);
   }
 
 
-  std::string dataset = argv[1];
+  // std::string dataset = argv[1];
 
   float* data_load = NULL;
   unsigned points_num, dim;
-  std::string dataFileName = "/home/hadoop/wzy/dataset/"+dataset+"/"+dataset+"_base.fvecs";
+  std::string dataFileName = argv[1];
   load_data(dataFileName.c_str(), data_load, points_num, dim);
 
   float* query_load = NULL;
   unsigned query_num, query_dim;
-  std::string queryFileName = "/home/hadoop/wzy/dataset/"+dataset+"/"+dataset+"_query.fvecs";
+  std::string queryFileName = argv[2];
   load_data(queryFileName.c_str(), query_load, query_num, query_dim);
   assert(dim == query_dim);
 
@@ -131,8 +131,8 @@ int main(int argc, char** argv) {
   std::vector<std::vector<int> > perm_list; std::vector<int> pivots;
 
   
-  unsigned L = (unsigned)atoi(argv[3]);
-  unsigned K = (unsigned)atoi(argv[4]);
+  unsigned L = (unsigned)atoi(argv[5]);
+  unsigned K = (unsigned)atoi(argv[6]);
   // float kperc = atof(argv[5]);
   // unsigned stopL = (unsigned)atoi(argv[6]);
   // int stepSize = atoi(argv[7]);
@@ -145,9 +145,8 @@ int main(int argc, char** argv) {
   }
 
 
-  IndexTauMNG index(dim, points_num, L2, nullptr);
-  std::string saveFile = argv[2];
-  std::string saveFileName = "/home/hadoop/wzy/graphs/taumng/"+dataset+"/"+ saveFile +".graph";
+  IndexTauMNG index(dim, points_num, INNER_PRODUCT, nullptr);
+  std::string saveFileName = argv[4];
   index.Load(saveFileName.c_str());
 
   Parameters paras;
@@ -156,7 +155,7 @@ int main(int argc, char** argv) {
   // paras.Set<unsigned>("stopL", stopL);
   // paras.Set<int>("stepSize", stepSize);
 
-  std::string gtFileName = "/home/hadoop/wzy/dataset/"+dataset+"/"+dataset+"_groundtruth.ivecs";
+  std::string gtFileName = argv[3];
   std::vector<std::vector<int> > gts = load_ground_truth(gtFileName.c_str());
 
   // std::vector<std::vector<float> > step_sum;

@@ -185,6 +185,7 @@ void IndexTauMNG::get_neighbors(const float *query, const Parameters &parameter,
     if (id >= nd_) continue;
     float dist = distance_->compare(data_ + dimension_ * (size_t)id, query,
                                     (unsigned)dimension_);
+                                    const float* v = data_ + dimension_ * (size_t)id;
     retset[i] = Neighbor(id, dist, true);
     fullset.push_back(retset[i]);
     L++;

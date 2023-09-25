@@ -17,12 +17,32 @@ namespace efanna2e{
     class Distance {
     public:
         virtual float compare(const float* a, const float* b, unsigned length) const = 0;
+        virtual float compare_by_loop(const float * a, const float * b, unsigned length) const = 0;
         virtual ~Distance() {}
     };
 
     class DistanceL2 : public Distance{
     public:
+        float compare_by_loop(const float * a, const float * b, unsigned size) const {
+          float res = 0;
+          for (int i = 0; i < size; i++) {
+            res += ((a[i] - b[i]) * (a[i] - b[i]));
+          }
+          return res;
+        }
+
+
+        // float compare(const float* a, const float* b, unsigned size) const {
+        //   float res = 0;
+        //   for (int i = 0; i < size; i++) {
+        //     res += (a[i] - b[i]) * (a[i] - b[i]);
+        //   }
+        //   return res;
+        // }
+
+
         float compare(const float* a, const float* b, unsigned size) const {
+
             float result = 0;
 
 #ifdef __GNUC__
@@ -57,8 +77,9 @@ namespace efanna2e{
       _mm256_storeu_ps(unpack, sum);
       result = unpack[0] + unpack[1] + unpack[2] + unpack[3] + unpack[4] + unpack[5] + unpack[6] + unpack[7];
 
+
 #else
-#ifdef __SSE2__
+#ifdef __SSE__
   #define SSE_L2SQR(addr1, addr2, dest, tmp1, tmp2) \
           tmp1 = _mm_load_ps(addr1);\
           tmp2 = _mm_load_ps(addr2);\
@@ -126,10 +147,40 @@ namespace efanna2e{
 
             return result;
         }
+
+
+
+
+
     };
+
+
+
+
+
+
 
   class DistanceInnerProduct : public Distance{
   public:
+
+    float compare_by_loop(const float * a, const float * b, unsigned size) const {
+      float res = 0;
+      for (int i = 0; i < size; i++) {
+        res += ((a[i] - b[i]) * (a[i] - b[i]));
+      }
+      return res;
+    }
+
+    // float compare(const float* a, const float* b, unsigned size) const {
+    //   float res = 0;
+    //   for (int i = 0; i < size; i++) {
+    //     res += (a[i] - b[i]) * (a[i] - b[i]);
+    //   }
+    //   return res;
+    // }
+
+
+
     float compare(const float* a, const float* b, unsigned size) const {
       float result = 0;
 #ifdef __GNUC__
@@ -223,10 +274,17 @@ namespace efanna2e{
 #endif
 #endif
 #endif
-      return result;
+      return -result;
     }
 
   };
+
+
+
+
+
+
+
   class DistanceFastL2 : public DistanceInnerProduct{
    public:
     float norm(const float* a, unsigned size) const{

@@ -36,8 +36,8 @@ int main(int argc, char** argv) {
   }
   float* data_load = NULL;
   unsigned points_num, dim;
-  std::string dataset = argv[1];
-  std::string dataFileName = "/home/hadoop/wzy/dataset/"+dataset+"/"+dataset+"_base.fvecs";
+  std::string dataFileName = argv[1];
+  // std::string dataFileName = "/home/hadoop/wzy/dataset/"+dataset+"/"+dataset+"_base.fvecs";
   load_data(dataFileName.c_str(), data_load, points_num, dim);
 
   std::string nn_graph_path(argv[2]);
@@ -64,8 +64,7 @@ int main(int argc, char** argv) {
   std::chrono::duration<double> diff = e - s;
 
   std::cout << "indexing time: " << diff.count() << "\n";
-  std::string saveFile = argv[8];
-  std::string saveFileName = "/home/hadoop/wzy/graphs/taumng/"+dataset+"/"+ saveFile +".graph";
+  std::string saveFileName = argv[8];
 
   index.Save(saveFileName.c_str());
 

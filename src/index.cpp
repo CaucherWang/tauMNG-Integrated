@@ -9,7 +9,7 @@ Index::Index(const size_t dimension, const size_t n, Metric metric = L2)
     }else if(metric == INNER_PRODUCT){
       distance_ = new DistanceInnerProduct();
     }else if(metric == FAST_L2){
-      distance_ = new DistanceFastL2();
+      distance_ = new DistanceL2();
     }
 }
 

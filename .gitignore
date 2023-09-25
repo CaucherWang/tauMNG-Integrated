@@ -1,1 +1,4 @@
 build/
+build-debug/
+*.txt
+*.out
